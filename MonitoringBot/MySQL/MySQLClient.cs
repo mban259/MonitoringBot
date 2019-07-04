@@ -13,7 +13,7 @@ namespace MonitoringBot.MySQL
 
         public MySQLClient(Options options)
         {
-            
+
             MySqlConnectionStringBuilder sb = new MySqlConnectionStringBuilder()
             {
                 Server = options.Server,
@@ -48,7 +48,7 @@ namespace MonitoringBot.MySQL
                     command.Parameters.AddWithValue("@user", user);
                     command.Parameters.AddWithValue("@id", id);
                     command.Parameters.AddWithValue("@is_update", isUpdate);
-                    command.Parameters.AddWithValue("@text", text);
+                    command.Parameters.AddWithValue("@text", text ?? "");
                     Debug.Log($"ExecuteNonQueryAsync");
                     await command.ExecuteNonQueryAsync();
                     Debug.Log("success");
@@ -81,7 +81,7 @@ namespace MonitoringBot.MySQL
                     command.Parameters.AddWithValue("@user", user);
                     command.Parameters.AddWithValue("@id", id);
                     command.Parameters.AddWithValue("@is_update", isUpdate);
-                    command.Parameters.AddWithValue("@text", text);
+                    command.Parameters.AddWithValue("@text", text ?? "");
                     Debug.Log($"ExecuteNonQueryAsync");
                     await command.ExecuteNonQueryAsync();
                     Debug.Log("success");
