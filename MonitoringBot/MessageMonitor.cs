@@ -35,9 +35,9 @@ namespace MonitoringBot
             if (context.IsPrivate)
             {
                 Debug.Log($"{(isUpdate ? "Update" : "Receive")} Direct Message\n" +
-                    $"author:{message.Author.Id}:{message.Author.Username}\n" +
-                    $"id:{message.Id}\n" +
-                    $"text:{message.ToString()}");
+                          $"author:{message.Author.Id}:{message.Author.Username}\n" +
+                          $"id:{message.Id}\n" +
+                          $"text:{message.ToString()}");
                 await InsertDirectMessage(userMessage, isUpdate);
             }
             else
@@ -54,13 +54,14 @@ namespace MonitoringBot
 
         private async Task InsertDirectMessage(SocketUserMessage message, bool isUpdate)
         {
-            await mysql.InsertDirectMessage(message.Author.Id, message.Id, isUpdate, message.ToString());
+            await mysql.InsertDirectMessage(message.Author.Id, message.Id, isUpdate, message.ToString(),
+                message.Author.Id == 0 || message.Author.IsBot);
         }
 
         private async Task InsertGuildMessage(SocketUserMessage message, CommandContext context, bool isUpdate)
         {
             await mysql.InsertGuildMessage(context.Guild.Id, context.Channel.Id, message.Author.Id, message.Id,
-                isUpdate, message.ToString());
+                isUpdate, message.ToString(), message.Author.Id == 0 || message.Author.IsBot);
         }
     }
 }

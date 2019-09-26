@@ -35,7 +35,7 @@ namespace MonitoringBot.MySQL
         }
 
         // time, user, id, is_update, text
-        public async Task InsertDirectMessage(ulong user, ulong id, bool isUpdate, string text)
+        public async Task InsertDirectMessage(ulong user, ulong id, bool isUpdate, string text, bool isBot)
         {
             MySqlTransaction tx = null;
             try
@@ -44,11 +44,12 @@ namespace MonitoringBot.MySQL
                 {
                     tx = connection.BeginTransaction();
                     command.CommandText =
-                        "INSERT INTO direct_messages(user, id, is_update, text) VALUES(@user, @id, @is_update, @text)";
+                        "INSERT INTO direct_messages(user, id, is_update, text, is_bot) VALUES(@user, @id, @is_update, @text, @is_bot)";
                     command.Parameters.AddWithValue("@user", user);
                     command.Parameters.AddWithValue("@id", id);
                     command.Parameters.AddWithValue("@is_update", isUpdate);
                     command.Parameters.AddWithValue("@text", text ?? "");
+                    command.Parameters.AddWithValue("@is_bot", isBot);
                     Debug.Log($"ExecuteNonQueryAsync");
                     await command.ExecuteNonQueryAsync();
                     Debug.Log("success");
@@ -66,7 +67,7 @@ namespace MonitoringBot.MySQL
         }
 
         public async Task InsertGuildMessage(ulong guild, ulong channel, ulong user, ulong id,
-            bool isUpdate, string text)
+            bool isUpdate, string text, bool isBot)
         {
             MySqlTransaction tx = null;
             try
@@ -75,13 +76,14 @@ namespace MonitoringBot.MySQL
                 {
                     tx = connection.BeginTransaction();
                     command.CommandText =
-                        "INSERT INTO guild_messages(guild, channel, user, id, is_update, text) VALUES(@guild, @channel, @user, @id, @is_update, @text)";
+                        "INSERT INTO guild_messages(guild, channel, user, id, is_update, text, is_bot) VALUES(@guild, @channel, @user, @id, @is_update, @text, @is_bot)";
                     command.Parameters.AddWithValue("@guild", guild);
                     command.Parameters.AddWithValue("@channel", channel);
                     command.Parameters.AddWithValue("@user", user);
                     command.Parameters.AddWithValue("@id", id);
                     command.Parameters.AddWithValue("@is_update", isUpdate);
                     command.Parameters.AddWithValue("@text", text ?? "");
+                    command.Parameters.AddWithValue("@is_bot", isBot);
                     Debug.Log($"ExecuteNonQueryAsync");
                     await command.ExecuteNonQueryAsync();
                     Debug.Log("success");
